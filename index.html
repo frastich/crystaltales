@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080a12">
+  <meta name="description" content="CrystalTales — Minecraft сервер с режимом Гриф на версии 1.16.5.">
+  <title>CrystalTales — Гриф 1.16.5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true">
+    <div class="noise"></div>
+    <div class="aurora aurora-one"></div>
+    <div class="aurora aurora-two"></div>
+    <div class="aurora aurora-three"></div>
+    <div class="aurora aurora-four"></div>
+    <div class="stars"></div>
+    <div class="light-grid"></div>
+    <div class="orbit-glow orbit-a"></div>
+    <div class="orbit-glow orbit-b"></div>
+    <canvas id="spaceCanvas"></canvas>
+  </div>
+
+  <header class="header" id="top">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="CrystalTales">
+        <span class="brand-logo">C</span>
+        <span class="brand-name">Crystal<span>Tales</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Навигация">
+        <a href="#about">Сервер</a>
+        <a href="#donate">Донат</a>
+        <a href="#how">Как играть</a>
+      </nav>
+      <a class="telegram-mini" href="https://t.me/CrystalTales1" target="_blank" rel="noopener">Telegram <span>↗</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="badge"><i></i> CRYSTALTALES • ГРИФ</div>
+          <h1>Не просто игра.<br><span>Твоя история.</span></h1>
+          <p class="hero-text">Создавай базу, развивайся, сражайся за ресурсы и оставляй свой след на CrystalTales.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="copyIp"><span>Скопировать IP</span><b>⌘</b></button>
+            <a class="btn btn-ghost" href="#donate">Посмотреть донат <span>↓</span></a>
+          </div>
+          <div class="server-meta">
+            <div class="meta-item"><span class="online-dot"></span><div><small>АДРЕС СЕРВЕРА</small><strong>crystaltales.loca.lol</strong></div></div>
+            <div class="meta-divider"></div>
+            <div class="meta-item"><div><small>ВЕРСИЯ</small><strong>1.16.5</strong></div></div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal reveal-delay">
+          <div class="visual-ring ring-one"></div>
+          <div class="visual-ring ring-two"></div>
+          <div class="visual-card">
+            <div class="visual-top"><span>CRYSTALTALES</span><em>01</em></div>
+            <div class="crystal-wrap"><div class="crystal-glow"></div><div class="crystal-3d"><div class="face top"></div><div class="face left"></div><div class="face right"></div><div class="face bottom"></div></div><div class="spark s1"></div><div class="spark s2"></div><div class="spark s3"></div><div class="spark s4"></div></div>
+            <div class="visual-bottom"><span>GRIEF SERVER</span><strong>1.16.5</strong></div>
+          </div>
+          <div class="floating-chip chip-top"><span>✦</span> ТВОЯ ТЕРРИТОРИЯ</div>
+          <div class="floating-chip chip-bottom"><span>⚔</span> ИГРАЙ БЕЗ ПРЕДЕЛОВ</div>
+        </div>
+      </div>
+      <div class="scroll-hint"><span></span> ЛИСТАЙ НИЖЕ</div>
+    </section>
+
+    <section class="quick-stats">
+      <div class="container stats-grid">
+        <div class="stat"><b>01</b><span>Режим</span><strong>Гриф</strong></div>
+        <div class="stat"><b>02</b><span>Версия</span><strong>1.16.5</strong></div>
+        <div class="stat"><b>03</b><span>Формат</span><strong>Выживание</strong></div>
+        <div class="stat"><b>04</b><span>Комьюнити</span><strong>Telegram</strong></div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-title reveal"><span class="section-kicker">01 / О СЕРВЕРЕ</span><h2>Здесь начинается<br><span>твоя история.</span></h2><p>CrystalTales создан для тех, кому нравится настоящий Minecraft: риск, развитие, борьба за ресурсы и собственная база.</p></div>
+        <div class="feature-grid">
+          <article class="feature-card reveal"><div class="feature-number">01</div><div class="feature-icon">⚔</div><h3>Настоящий Гриф</h3><p>Строй укрепления, защищай ресурсы и будь готов к нападению в любой момент.</p><span class="feature-line"></span></article>
+          <article class="feature-card reveal"><div class="feature-number">02</div><div class="feature-icon">◆</div><h3>Развитие</h3><p>Собирай ресурсы, развивай базу и постепенно превращай её в настоящую крепость.</p><span class="feature-line"></span></article>
+          <article class="feature-card reveal"><div class="feature-number">03</div><div class="feature-icon">♛</div><h3>Соревнование</h3><p>Стань сильнее соперников и докажи, что именно твоя команда заслуживает победы.</p><span class="feature-line"></span></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="donate" class="section donate-section">
+      <div class="container">
+        <div class="section-title center reveal"><span class="section-kicker">02 / ПРИВИЛЕГИИ</span><h2>Выбери свой <span>уровень.</span></h2><p>Восемь привилегий для разных стилей игры. Подробности по каждой доступны ниже.</p></div>
+        <div class="donate-grid" id="donateGrid"></div>
+        <div class="donate-bottom reveal"><div><span>НУЖНА ПОМОЩЬ?</span><p>По вопросам покупки и другим вопросам сервера напиши администрации.</p></div><a class="btn btn-primary" href="https://t.me/CrystalTales1" target="_blank" rel="noopener">Написать в Telegram <span>↗</span></a></div>
+      </div>
+    </section>
+
+    <section id="how" class="section how-section">
+      <div class="container how-grid">
+        <div class="section-title reveal"><span class="section-kicker">03 / СТАРТ</span><h2>Зайти можно<br><span>за минуту.</span></h2><p>Тебе нужна Minecraft 1.16.5 и адрес сервера. Остальное начинается уже внутри игры.</p></div>
+        <div class="steps reveal">
+          <div class="step"><span>01</span><div><h3>Установи 1.16.5</h3><p>Запусти Minecraft на версии 1.16.5.</p></div></div>
+          <div class="step"><span>02</span><div><h3>Добавь сервер</h3><p>Адрес: <b>crystaltales.loca.lol</b></p></div></div>
+          <div class="step"><span>03</span><div><h3>Начинай играть</h3><p>Создай базу, развивайся и вступай в борьбу.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="telegram-section">
+      <div class="container telegram-box reveal">
+        <div class="telegram-symbol">✈</div>
+        <div><span class="section-kicker">НЕ ПРОПУСКАЙ</span><h2>Новости — в Telegram.</h2><p>Анонсы, обновления, конкурсы и важные события CrystalTales.</p></div>
+        <a class="btn btn-light" href="https://t.me/CrystalTales1" target="_blank" rel="noopener">Открыть канал <span>↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a class="brand" href="#top"><span class="brand-logo">C</span><span class="brand-name">Crystal<span>Tales</span></span></a>
+      <span>© 2026 CrystalTales</span>
+      <a href="https://t.me/CrystalTales1" target="_blank" rel="noopener">Telegram ↗</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">IP скопирован</div>
+  <script src="script.js"></script>
+</body>
+</html>
