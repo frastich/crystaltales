@@ -30,6 +30,23 @@ const ranks = [
 const grid = document.getElementById("donateGrid");
 grid.innerHTML = ranks.map((r,i)=>`<article class="donate-card reveal" style="--rank:${r.color}"><div class="rank-top"><span class="rank">${r.name}</span><span class="rank-price">${r.price} <small>₽</small></span></div><div class="rank-kit">Набор <b>${r.kit}</b></div><div class="perk-list">${r.perks.map(([cmd,desc])=>`<div class="perk"><code>${cmd}</code><span>${desc}</span></div>`).join("")}</div><div class="limits"><b>Лимиты:</b> ${r.limits}</div></article>`).join("");
 
+// Rules tabs
+document.querySelectorAll("[data-rules-tab]").forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    const target=tab.dataset.rulesTab;
+    document.querySelectorAll("[data-rules-tab]").forEach(t=>{
+      const active=t===tab;
+      t.classList.toggle("active",active);
+      t.setAttribute("aria-selected",active?"true":"false");
+    });
+    document.querySelectorAll(".rules-panel").forEach(panel=>{
+      const active=panel.id===target;
+      panel.classList.toggle("active",active);
+      panel.hidden=!active;
+    });
+  });
+});
+
 const toast = document.getElementById("toast");
 document.getElementById("copyIp")?.addEventListener("click", async()=>{
   try { await navigator.clipboard.writeText(IP); toast.textContent="IP скопирован: "+IP; }

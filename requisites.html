@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080a12">
+  <title>Реквизиты — CrystalTales</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .legal-page{min-height:100vh;padding:80px 0}
+    .legal-card{max-width:650px;margin:0 auto;padding:34px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.035);box-shadow:var(--shadow)}
+    .legal-card h1{margin:8px 0 10px;font-size:38px;letter-spacing:-1.5px}
+    .legal-card p{color:var(--muted);line-height:1.65;font-size:13px}
+    .legal-row{display:flex;justify-content:space-between;gap:24px;padding:16px 0;border-top:1px solid var(--line)}
+    .legal-label{color:#858b9b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:800}
+    .legal-value{text-align:right;color:#eceef4;font-size:13px}
+    .legal-note{margin-top:22px;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.025);color:#9da3b3;font-size:11px;line-height:1.6}
+    .legal-back{display:inline-block;margin-top:22px;color:#b9a8ff;font-size:12px;font-weight:800}
+    @media(max-width:600px){.legal-page{padding:45px 0}.legal-card{padding:24px}.legal-row{display:block}.legal-value{text-align:left;margin-top:5px}}
+  </style>
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true">
+    <div class="noise"></div><div class="aurora aurora-one"></div><div class="aurora aurora-two"></div>
+    <div class="aurora aurora-three"></div><div class="aurora aurora-four"></div><div class="stars"></div>
+    <div class="light-grid"></div><div class="orbit-glow orbit-a"></div><div class="orbit-glow orbit-b"></div>
+  </div>
+
+  <main class="legal-page">
+    <div class="container">
+      <section class="legal-card">
+        <span class="section-kicker">CRYSTALTALES</span>
+        <h1>Реквизиты</h1>
+        <p>Информация о продавце для пользователей сайта.</p>
+
+        <!-- ЗАМЕНИ ТОЛЬКО ЗНАЧЕНИЯ В КВАДРАТНЫХ СКОБКАХ НА СВОИ РЕАЛЬНЫЕ ДАННЫЕ. -->
+                <div class="legal-row">
+          <div class="legal-label">Статус</div>
+          <div class="legal-value">Самозанятый</div>
+        </div>
+        <div class="legal-row">
+          <div class="legal-label">ИНН</div>
+          <div class="legal-value">282370006751</div>
+        </div>
+        <div class="legal-row">
+          <div class="legal-label">E-mail</div>
+          <div class="legal-value">arigatori228@gmail.com</div>
+        </div>
+        <div class="legal-row">
+          <div class="legal-label">Сайт</div>
+          <div class="legal-value">crystaltales.ru</div>
+        </div>
+
+        <div class="legal-note">
+          ИНН и контактные данные на этой странице относятся к продавцу.
+          Покупателю не требуется указывать свой ИНН при покупке донатов.
+        </div>
+
+        <a class="legal-back" href="index.html">← Вернуться на CrystalTales</a>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

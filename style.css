@@ -33,3 +33,28 @@
 .perk span{color:#9fa5b5;font-size:10px;line-height:1.45}
 @media(max-width:560px){.perk{grid-template-columns:1fr;gap:2px}.perk code{font-size:10px}.perk span{font-size:10px}.light-grid{background-size:55px 55px}.orbit-a,.orbit-b{display:none}}
 @media(prefers-reduced-motion:reduce){.light-grid,.orbit-glow,.stars,.aurora{animation:none!important}}
+
+/* Rules section */
+.rules-section{background:linear-gradient(180deg,transparent,rgba(80,70,180,.055),transparent)}
+.rules-tabs{display:flex;justify-content:center;gap:10px;margin:0 auto 26px;flex-wrap:wrap}
+.rules-tab{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.025);color:#9da3b3;padding:12px 18px;border-radius:12px;font-size:12px;font-weight:900;cursor:pointer;transition:.22s}
+.rules-tab span{color:#686f82;margin-left:6px;font-size:10px}
+.rules-tab:hover{background:rgba(255,255,255,.055);color:#fff;transform:translateY(-1px)}
+.rules-tab.active{color:#fff;border-color:rgba(139,92,246,.45);background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(79,124,255,.11));box-shadow:0 12px 35px rgba(70,65,170,.13)}
+.rules-tab.active span{color:#a991ff}
+.rules-panel{display:none}
+.rules-panel.active{display:block;animation:rulesIn .35s ease}
+.rules-panel[hidden]{display:none}
+@keyframes rulesIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.rules-panel-head{display:flex;align-items:end;justify-content:space-between;gap:25px;padding:24px 26px;margin-bottom:14px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025)}
+.rules-panel-head>div{display:flex;align-items:center;gap:13px}.rules-panel-head>div>span{font-size:10px;color:#8170d8;font-weight:900;letter-spacing:1px}.rules-panel-head h3{margin:0;font-size:19px}.rules-panel-head p{margin:0;color:#777e90;font-size:11px;line-height:1.5;text-align:right}
+.rules-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.rule-card{position:relative;padding:23px 23px 20px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));overflow:hidden;transition:.24s}
+.rule-card:before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:linear-gradient(180deg,#9b7cff,#4e78ff);opacity:.75}
+.rule-card.ban:before{background:linear-gradient(180deg,#ff6b87,#8b5cf6)}
+.rule-card:hover{transform:translateY(-3px);border-color:rgba(139,92,246,.32);box-shadow:0 20px 45px rgba(0,0,0,.18)}
+.rule-id{font-size:11px;font-weight:900;color:#9b7cff;letter-spacing:1px;margin-bottom:10px}.rule-card.ban .rule-id{color:#ff8ba3}
+.rule-card h4{margin:0;min-height:44px;font-size:13px;line-height:1.55;color:#e7e9ef;font-weight:700}
+.rule-punishment{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between;gap:14px}.rule-punishment span{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:#666d80;font-weight:900;white-space:nowrap}.rule-punishment b{font-size:11px;line-height:1.45;color:#bca9ff;text-align:right}.rule-card.ban .rule-punishment b{color:#ff9db0}
+@media(max-width:700px){.rules-grid{grid-template-columns:1fr}.rules-panel-head{display:block}.rules-panel-head p{text-align:left;margin-top:8px}.rule-card h4{min-height:0}}
+@media(max-width:560px){.rules-tab{width:100%;}.rules-panel-head{padding:20px}.rule-card{padding:20px}.rule-punishment{display:block}.rule-punishment b{display:block;text-align:left;margin-top:6px}}
