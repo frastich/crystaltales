@@ -27,7 +27,7 @@ const ranks = [
   ],limits:"99 домов • 99 регионов • 99 слотов"}
 ];
 
-const PAYMENT_API = "https://crystaltales-payment.daniil632348.workers.dev";
+const PAYMENT_API = "https://api.crystaltales.online";
 
 const grid = document.getElementById("donateGrid");
 
