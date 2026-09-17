@@ -27,8 +27,220 @@ const ranks = [
   ],limits:"99 домов • 99 регионов • 99 слотов"}
 ];
 
+const PAYMENT_API = "https://crystaltales-payment.daniil632348.workers.dev";
+
 const grid = document.getElementById("donateGrid");
-grid.innerHTML = ranks.map((r,i)=>`<article class="donate-card reveal" style="--rank:${r.color}"><div class="rank-top"><span class="rank">${r.name}</span><span class="rank-price">${r.price} <small>₽</small></span></div><div class="rank-kit">Набор <b>${r.kit}</b></div><div class="perk-list">${r.perks.map(([cmd,desc])=>`<div class="perk"><code>${cmd}</code><span>${desc}</span></div>`).join("")}</div><div class="limits"><b>Лимиты:</b> ${r.limits}</div></article>`).join("");
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+grid.innerHTML = ranks.map(r => `
+  <article class="donate-card reveal donate-card-clickable"
+    style="--rank:${r.color}"
+    data-rank="${r.name}"
+    role="button"
+    tabindex="0"
+    aria-label="Купить привилегию ${r.name} за ${r.price} рублей">
+    <div class="rank-top">
+      <span class="rank">${r.name}</span>
+      <span class="rank-price">${r.price} <small>₽</small></span>
+    </div>
+    <div class="rank-kit">Набор <b>${r.kit}</b></div>
+    <div class="perk-list">${r.perks.map(([cmd,desc]) => `
+      <div class="perk"><code>${cmd}</code><span>${desc}</span></div>
+    `).join("")}</div>
+    <div class="limits"><b>Лимиты:</b> ${r.limits}</div>
+    <div class="buy-hint">Нажмите, чтобы купить</div>
+  </article>
+`).join("");
+
+(() => {
+  const style = document.createElement("style");
+  style.textContent = `
+    .donate-card-clickable { cursor:pointer; position:relative; }
+    .donate-card-clickable:focus-visible { outline:2px solid var(--rank); outline-offset:4px; }
+    .buy-hint { margin-top:16px; text-align:center; font-size:12px; opacity:.6; letter-spacing:.04em; text-transform:uppercase; }
+    .ct-pay-backdrop {
+      position:fixed; inset:0; z-index:9998; display:flex; align-items:center; justify-content:center;
+      padding:20px; background:rgba(5,7,18,.72); backdrop-filter:blur(10px);
+    }
+    .ct-pay-modal {
+      width:min(420px,100%); border:1px solid rgba(255,255,255,.12); border-radius:20px;
+      padding:24px; background:rgba(17,19,35,.97); box-shadow:0 24px 80px rgba(0,0,0,.45);
+    }
+    .ct-pay-title { margin:0 0 6px; font-size:22px; }
+    .ct-pay-subtitle { margin:0 0 20px; opacity:.7; font-size:14px; line-height:1.5; }
+    .ct-pay-label { display:block; margin-bottom:8px; font-size:13px; opacity:.8; }
+    .ct-pay-input {
+      width:100%; box-sizing:border-box; padding:13px 14px; border:1px solid rgba(255,255,255,.14);
+      border-radius:12px; background:rgba(255,255,255,.06); color:inherit; font:inherit; outline:none;
+    }
+    .ct-pay-input:focus { border-color:rgba(255,255,255,.35); }
+    .ct-pay-actions { display:flex; gap:10px; margin-top:16px; }
+    .ct-pay-btn { flex:1; border:0; border-radius:12px; padding:13px 16px; font:inherit; font-weight:700; cursor:pointer; }
+    .ct-pay-submit { background:#fff; color:#111; }
+    .ct-pay-cancel { background:rgba(255,255,255,.08); color:inherit; }
+    .ct-pay-error { min-height:20px; margin-top:10px; color:#ff8f9d; font-size:13px; }
+    .ct-pay-rank { font-weight:700; }
+  `;
+  document.head.appendChild(style);
+
+  let widgetScriptPromise = null;
+  let checkout = null;
+
+  function loadYooKassaWidget() {
+    if (window.YooMoneyCheckoutWidget) return Promise.resolve();
+    if (!widgetScriptPromise) {
+      widgetScriptPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://yookassa.ru/checkout-widget/v1/checkout-widget.js";
+        script.onload = resolve;
+        script.onerror = () => reject(new Error("Не удалось загрузить виджет ЮKassa"));
+        document.head.appendChild(script);
+      });
+    }
+    return widgetScriptPromise;
+  }
+
+  function showToast(message) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3000);
+  }
+
+  function openNicknameModal(rank) {
+    return new Promise(resolve => {
+      const backdrop = document.createElement("div");
+      backdrop.className = "ct-pay-backdrop";
+      backdrop.innerHTML = `
+        <div class="ct-pay-modal" role="dialog" aria-modal="true" aria-labelledby="ctPayTitle">
+          <h2 class="ct-pay-title" id="ctPayTitle">Покупка ${escapeHtml(rank.name)}</h2>
+          <p class="ct-pay-subtitle">
+            Стоимость: <span class="ct-pay-rank">${rank.price} ₽</span><br>
+            Введите Minecraft-ник, на который будет оформлена покупка.
+          </p>
+          <label class="ct-pay-label" for="ctNickname">Minecraft-ник</label>
+          <input id="ctNickname" class="ct-pay-input" type="text" maxlength="16"
+            autocomplete="off" spellcheck="false" placeholder="Например, Steve">
+          <div class="ct-pay-error" id="ctPayError"></div>
+          <div class="ct-pay-actions">
+            <button type="button" class="ct-pay-btn ct-pay-cancel">Отмена</button>
+            <button type="button" class="ct-pay-btn ct-pay-submit">Продолжить</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(backdrop);
+
+      const input = backdrop.querySelector("#ctNickname");
+      const error = backdrop.querySelector("#ctPayError");
+      const submit = backdrop.querySelector(".ct-pay-submit");
+      const cancel = backdrop.querySelector(".ct-pay-cancel");
+
+      const close = value => { backdrop.remove(); resolve(value); };
+
+      cancel.addEventListener("click", () => close(null));
+      backdrop.addEventListener("click", e => { if (e.target === backdrop) close(null); });
+
+      submit.addEventListener("click", () => {
+        const nickname = input.value.trim();
+        if (!nickname) {
+          error.textContent = "Введите Minecraft-ник.";
+          input.focus();
+          return;
+        }
+        if (!/^[A-Za-z0-9_]{3,16}$/.test(nickname)) {
+          error.textContent = "Только латинские буквы, цифры и _. От 3 до 16 символов.";
+          input.focus();
+          return;
+        }
+        close(nickname);
+      });
+
+      input.addEventListener("keydown", e => {
+        if (e.key === "Enter") submit.click();
+        if (e.key === "Escape") close(null);
+      });
+
+      requestAnimationFrame(() => input.focus());
+    });
+  }
+
+  async function startPayment(rank) {
+    const nickname = await openNicknameModal(rank);
+    if (!nickname) return;
+
+    showToast("Создаём платёж…");
+
+    try {
+      const response = await fetch(`${PAYMENT_API}/api/create-payment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nickname, rank: rank.name })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok || !data.confirmationToken) {
+        throw new Error(data.error || "Не удалось создать платёж");
+      }
+
+      await loadYooKassaWidget();
+      checkout?.destroy?.();
+
+      checkout = new window.YooMoneyCheckoutWidget({
+        confirmation_token: data.confirmationToken,
+        customization: { modal: true },
+        error_callback: error => {
+          console.error("YooKassa widget error:", error);
+          showToast("Не удалось открыть оплату.");
+        }
+      });
+
+      checkout.on("success", () => {
+        checkout?.destroy?.();
+        checkout = null;
+        showToast(`Платёж завершён. ${rank.name} для ${nickname} будет выдан после подтверждения.`);
+      });
+
+      checkout.on("fail", () => {
+        checkout?.destroy?.();
+        checkout = null;
+        showToast("Платёж не завершён.");
+      });
+
+      checkout.on("modal_close", () => {
+        checkout?.destroy?.();
+        checkout = null;
+      });
+
+      await checkout.render();
+    } catch (error) {
+      console.error("Payment error:", error);
+      showToast(error.message || "Ошибка при создании платежа.");
+    }
+  }
+
+  grid.querySelectorAll("[data-rank]").forEach(card => {
+    const buy = () => {
+      const rank = ranks.find(r => r.name === card.dataset.rank);
+      if (rank) startPayment(rank);
+    };
+    card.addEventListener("click", buy);
+    card.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        buy();
+      }
+    });
+  });
+})();
 
 // Rules tabs
 (() => {
